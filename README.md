@@ -12,7 +12,7 @@ git clone https://github.com/open-mmlab/mmpretrain.git
 cd mmpretrain
 pip install -U openmim && mim install -e .
 ```
-pip安装
+- pip安装
 ```bash
 pip install -U openmim && mim install "mmpretrain>=1.0.0rc8"
 ```
@@ -27,39 +27,41 @@ inference_model(model, 'demo/demo.JPEG')
 选取公开交通牌数据集进行微调。 8：1：1安排训练，测试，验证集。 这个数据集共有58类
 - 数据集分析
 
-dataset/
+    dataset/
+    
+    ├── images
+    
+    │   ├── xxx.png
+    
+    │   ├── xxy.png
+    
+    │   └── ...
+    
+    └── annotations.csv
+    
+    这是下载后的数据集样式，但是我们需要转换成mmpretrain支持训练的两种基本格式之一(子文件夹方式/标注文件方式)。
+    
+    具体细节请看mmpretrain官方文档准备数据集:  [链接](https://mmpretrain.readthedocs.io/zh_CN/latest/user_guides/dataset_prepare.html)
+    
+    我们这里采用标注文件的方式，具体需要转换成如下格式所示
 
-├── images
+    dataset
+    
+    ├── meta
+    
+    │   ├── test.txt     # 测试数据集的标注文件
+    
+    │   ├── train.txt    # 训练数据集的标注文件
+    
+    │   └── val.txt      # 验证数据集的标注文件  
+    
+    └── images
 
-│   ├── xxx.png
-
-│   ├── xxy.png
-
-│   └── ...
-
-└── annotations.csv
-
-这是下载后的数据集样式，但是我们需要转换成mmpretrain支持训练的两种基本格式之一(子文件夹方式/标注文件方式)。
-
-具体细节请看mmpretrain官方文档准备数据集:  [链接](https://mmpretrain.readthedocs.io/zh_CN/latest/user_guides/dataset_prepare.html)
-
-我们这里采用标注文件的方式，具体需要转换成如下格式所示
-
-dataset
-
-├── meta
-
-│   ├── test.txt     # 测试数据集的标注文件
-
-│   ├── train.txt    # 训练数据集的标注文件
-
-│   └── val.txt      # 验证数据集的标注文件  
-
-└── images
-
-转换脚本请参见 split_images.ipynb
+    转换脚本请参见 [split_images.ipynb](https://github.com/yinfan98/mmpretrain_Jetson/blob/main/split_images.ipynb)
 - 数据集中图片展示
-todo展示
+
+![数据集图片](https://github.com/yinfan98/mmpretrain_Jetson/blob/main/000_1_0030.png)
+
 - config文件解析
 当按照我们这样排布数据集时，我们需要修改config文件。我这里简单介绍config需要修改的位置，若有训练需求可以自取。
 ```python
@@ -105,31 +107,35 @@ optim_wrapper = dict(
     optimizer=dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0001))
 ```
 ## 0x03 fine-tune效果展示
-todo 插入训练后结果
+**todo 插入训练后结果**
 能从上图看出，在fine-tune之后，准确率有较高提升
-## 0x04 转换和测速
+## 0x04 转换
 在[deploee](https://platform.openmmlab.com/deploee/task-convert-list)网站上进行模型转换
+![模型转换](https://github.com/yinfan98/mmpretrain_Jetson/blob/main/model_convert.PNG)
 
-todo 插入解释图片
-
-这里算法中选择mmpretrain算法，训练配置文件路径选择自己的配置文件。配置文件有需要可以自取
-
-需要注意的是，这里训练配置文件必须是全部展开后的配置文件，也就是说不能出现类似以下代码
-```python
-_base_ = [
-    'efficientnet_b0.py',
-    'imagenet_bs32.py',
-    'imagenet_bs256.py',
-    'default_runtime.py',
-]
-```
-之后目标runtime选择Jetson Orin，测试数据上传一张数据集中图片即可。
+- 算法中选择mmpretrain算法
+- 训练配置文件路径选择自己的配置文件。配置文件有需要可以自取
+    需要注意的是，这里训练配置文件必须是全部展开后的配置文件，也就是说不能出现类似以下代码
+    ```python
+    _base_ = [
+        'efficientnet_b0.py',
+        'imagenet_bs32.py',
+        'imagenet_bs256.py',
+        'default_runtime.py',
+    ]
+    ```
+- 目标runtime选择Jetson Orin
+- 测试数据上传一张数据集中图片即可。
 
 转换后即可下载模型，然后开始模型测速。
+## 0x04 测速
+![模型测速](https://github.com/yinfan98/mmpretrain_Jetson/blob/main/speed_test.PNG)
 
-todo 插入解释图片
-
-这里模型测速选择mmpretrain、上传模型的zip文件、上传一张测试图片、测速设备选择Jetson Orin得到以下测速结果
+- 任务类型选择mmpretrain
+- 模型上传模型的zip文件
+- 测速数据上传一张测试图片
+- 测速设备选择Jetson Orin
+    得到以下测速结果
 
 ```text
 ========== stdout ==========
@@ -245,3 +251,6 @@ dupd_lane_smlal_s8 throughput: 0.459077 ns 34.852520 GFlops latency: 3.199949 ns
 ldd_mla_s16_lane_1_4_sep throughput: 0.456810 ns 35.025478 GFlops latency: 0.456497 ns :
 ldrd_sshll throughput: 0.456533 ns 17.523367 GFlops latency: 0.458355 ns :
 ```
+## 0x05 补充说明
+mmdeploy不支持EfficientRandomCrop和EfficientCenterCrop，需要修改成CenterCrop和RandomResizedCrop进行测速操作。
+个人正在实现EfficientRandomCrop和EfficientCenterCrop算子，即将PR
