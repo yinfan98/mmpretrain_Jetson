@@ -3,6 +3,7 @@ fineturing the EfficientNet model and deploy on Jetson
 
 ## 0x00 整体总览
 本项目选用mmpretrain的EfficientNet进行微调，并部署在Jetson Orin开发板上
+
 本次项目选用个人私人云服务器进行开发
 ## 0x01 环境安装
 - clone mmpretrain && install
