@@ -109,14 +109,19 @@ optim_wrapper = dict(
 ```
 ## 0x03 fine-tune效果展示
 
-training-log
-[training-log](https://github.com/yinfan98/mmpretrain_Jetson/blob/main/training_log.png)
+- training-log
 
-test-log
 
-[test-log1](https://github.com/yinfan98/mmpretrain_Jetson/blob/main/testing_log_before_ft.png)
+![training-log](https://github.com/yinfan98/mmpretrain_Jetson/blob/main/training_log.png)
 
-[test-log2](https://github.com/yinfan98/mmpretrain_Jetson/blob/main/testing_log_after_ft.png)
+- test-log
+  
+**before fine-tune:**
+
+![test-log1](https://github.com/yinfan98/mmpretrain_Jetson/blob/main/testing_log_before_ft.png)
+        **after fine-tune:**
+        
+![test-log2](https://github.com/yinfan98/mmpretrain_Jetson/blob/main/testing_log_after_ft.png)
 
 能从上图看出，在fine-tune之后，准确率有较高提升
 
