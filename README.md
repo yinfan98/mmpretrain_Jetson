@@ -108,8 +108,18 @@ optim_wrapper = dict(
     optimizer=dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0001))
 ```
 ## 0x03 fine-tune效果展示
-**todo 插入训练后结果**
+
+training-log
+[training-log](https://github.com/yinfan98/mmpretrain_Jetson/blob/main/training_log.png)
+
+test-log
+
+[test-log1](https://github.com/yinfan98/mmpretrain_Jetson/blob/main/testing_log_before_ft.png)
+
+[test-log2](https://github.com/yinfan98/mmpretrain_Jetson/blob/main/testing_log_after_ft.png)
+
 能从上图看出，在fine-tune之后，准确率有较高提升
+
 ## 0x04 转换
 在[deploee](https://platform.openmmlab.com/deploee/task-convert-list)网站上进行模型转换
 ![模型转换](https://github.com/yinfan98/mmpretrain_Jetson/blob/main/model_convert.PNG)
