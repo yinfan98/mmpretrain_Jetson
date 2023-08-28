@@ -1,5 +1,5 @@
 # mmpretrain_Jetson
-fineturing the EfficientNet model and deploy on Jetson
+fine-tune the EfficientNet model and deploy on Jetson
 
 ## 0x00 整体总览
 本项目选用mmpretrain的EfficientNet进行微调，并部署在Jetson Orin开发板上
@@ -123,7 +123,12 @@ optim_wrapper = dict(
         
 ![test-log2](https://github.com/yinfan98/mmpretrain_Jetson/blob/main/testing_log_after_ft.png)
 
-能从上图看出，在fine-tune之后，准确率有较高提升
+ 微调对比      | acc(Top1)     | acc(Top5)     
+ -------- | :-----------:  | :-----------: 
+ 微调前     | 2.4351    | 6.3312
+ 微调后 | 97.4026 | 100.0
+
+能从上图和表格看出，在fine-tune之后，准确率有较高提升
 
 ## 0x04 转换
 在[deploee](https://platform.openmmlab.com/deploee/task-convert-list)网站上进行模型转换
